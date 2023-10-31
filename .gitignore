@@ -1,0 +1,13 @@
+# pycharm
+.idea/
+build/
+__pycache__/
+
+# virtualenv
+venv/
+.venv/
+ENV/
+
+# dotenv
+.env
+
