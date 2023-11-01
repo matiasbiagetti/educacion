@@ -1,7 +1,9 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
+
+from app.services.cursos_service import CursosService
 
 cursos_router = APIRouter(prefix="/cursos", tags=["Cursos"])
 
