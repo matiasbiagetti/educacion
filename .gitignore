@@ -9,5 +9,6 @@ venv/
 ENV/
 
 # dotenv
-.env/
+.env
+
 

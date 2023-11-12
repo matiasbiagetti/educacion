@@ -1,4 +1,4 @@
-from sqlalchemy import String, Column
+from sqlalchemy import String, Column, Integer
 from sqlalchemy.orm import relationship
 
 from app.models.base_model import EntityMeta
@@ -11,7 +11,7 @@ class Colegio(EntityMeta):
 
     __tablename__ = "colegios"
 
-    id = Column(String(6), primary_key=True)
+    id = Column(Integer, primary_key=True)
     nombre = Column(String(100), nullable=False, unique=True)
 
     cursos = relationship("Curso", back_populates="colegio")
