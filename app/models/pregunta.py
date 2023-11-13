@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.models.base_model import EntityMeta
 from app.models.curso import Curso
+from app.models.preguntas_cursos import preguntas_cursos
 
 
 class Pregunta(EntityMeta):
@@ -13,10 +14,10 @@ class Pregunta(EntityMeta):
 
     __tablename__ = "preguntas"
 
-    id : Mapped[int] = mapped_column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     texto = Column(String(100), nullable=False)
 
-    cursos : Mapped[list[Curso]] = relationship(secondary="preguntas_cursos", back_populates="preguntas")
+    cursos = relationship(secondary=preguntas_cursos, back_populates="preguntas")
     respuestas = relationship("Respuesta", back_populates="pregunta")
 
     def to_dict(self) -> dict:

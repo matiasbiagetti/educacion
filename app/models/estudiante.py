@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from app.models.base_model import EntityMeta
 
+from app.models.base_model import EntityMeta
+from app.models.estudiantes_cursos import estudiantes_cursos
 
 
 class Estudiante(EntityMeta):
@@ -12,12 +13,12 @@ class Estudiante(EntityMeta):
 
     __tablename__ = "estudiantes"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     nombre = Column(String(100), nullable=False)
     apellido = Column(String(100), nullable=False)
     fecha_nacimiento = Column(Date, nullable=False)
 
-    cursos: Mapped[list["Curso"]] = relationship(secondary="estudiantes_cursos", back_populates="estudiantes")
+    cursos = relationship("Curso", secondary=estudiantes_cursos, back_populates="estudiantes")
     respuestas = relationship("Respuesta", back_populates="estudiantes")
 
     def to_dict(self) -> dict:

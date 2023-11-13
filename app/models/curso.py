@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base_model import EntityMeta
 from app.models.estudiante import Estudiante
+from app.models.estudiantes_cursos import estudiantes_cursos
+from app.models.preguntas_cursos import preguntas_cursos
 
 
 class Curso(EntityMeta):
@@ -12,7 +14,7 @@ class Curso(EntityMeta):
 
     __tablename__ = "cursos"
 
-    codigo: Mapped[int] = mapped_column(Integer, primary_key=True)
+    codigo = Column(Integer, primary_key=True)
     materia = Column(String(100), nullable=False)
     profesor_id = Column(Integer, ForeignKey("profesores.id"), nullable=False)
     colegio_id = Column(Integer, ForeignKey("colegios.id"), nullable=False)
@@ -21,8 +23,8 @@ class Curso(EntityMeta):
 
     profesor = relationship("Profesor", back_populates="cursos")
     colegio = relationship("Colegio", back_populates="cursos")
-    estudiantes: Mapped[list[Estudiante]] = relationship(secondary="estudiantes_cursos", back_populates="cursos")
-    preguntas: Mapped[list["Pregunta"]] = relationship(secondary="preguntas_cursos", back_populates="cursos")
+    estudiantes = relationship("Estudiante", secondary=estudiantes_cursos, back_populates="cursos")
+    preguntas = relationship("Pregunta", secondary=preguntas_cursos, back_populates="cursos")
 
     def to_dict(self) -> dict:
         return {
