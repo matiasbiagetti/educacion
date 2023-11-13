@@ -5,7 +5,7 @@ from app.configs.database import get_db_connection
 from app.models.clase import Clase
 
 
-class ClasesRespoitory:
+class ClasesRepository:
     """
     Clase que maneja la persistencia de las clases
     """

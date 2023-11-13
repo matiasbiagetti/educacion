@@ -19,4 +19,6 @@ class ColegiosService:
         """
         Crea un colegio
         """
-        return self.colegios_repository.crear_colegio(colegio_data)
+        colegio = Colegio(nombre=colegio_data.nombre)
+        self.colegios_repository.save(colegio)
+        return colegio
