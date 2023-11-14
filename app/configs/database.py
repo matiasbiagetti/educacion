@@ -1,6 +1,10 @@
 from sqlalchemy import create_engine, make_url
 from sqlalchemy.orm import scoped_session, sessionmaker
 import os
+from dotenv import load_dotenv
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv()
 
 # Get environment variables
 DB_DIALECT = os.getenv("DB_DIALECT", "mysql")
@@ -20,6 +24,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
 
 def get_db_connection():
     db = scoped_session(SessionLocal)
+    print(DB_PASSWORD)
     print("DB connection opened")
     try:
         yield db

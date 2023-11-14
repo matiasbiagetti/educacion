@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import HTTPException, APIRouter, Depends
 from pydantic import BaseModel
 
-from app.services.colegios_service import ColegiosService
+from app.services.colegios_service import ColegiosService, ColegioData
 
 colegios_router = APIRouter(prefix="/colegios", tags=["Colegios"])
 
@@ -22,8 +22,9 @@ def crear_colegio(payload: ColegioPayload, service: ColegiosService = Depends(Co
     Crea un colegio
     """
     try:
-        colegio = service.crear_colegio(payload)
-        return ColegioResponse(**colegio)
+        data = ColegioData(nombre=payload.nombre)
+        colegio = service.crear_colegio(data)
+        return ColegioResponse(id=colegio.id, nombre=colegio.nombre)
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 

@@ -8,17 +8,16 @@ class Feedback(EntityMeta):
     """
     Un feedback es una opinion de un estudiante sobre un curso
     """
-
-    __tablename__ = "feedback"
-
+    __tablename__ = 'feedback'
     id = Column(Integer, primary_key=True)
-    texto = Column(String(255), nullable=False)
-    curso_id = Column(Integer, ForeignKey("cursos.id"), nullable=False)
-    alumno_id = Column(Integer, ForeignKey("estudiantes.id"), nullable=False)
-    clasificacion = Column(String(255), nullable=False)
+    texto = Column(String(length=255), nullable=False)
+    curso_id = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
+    alumno_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
+    clasificacion = Column(String(length=255), nullable=False)
 
-    curso = relationship("Curso", back_populates="feedback")
-    alumno = relationship("Alumno", back_populates="feedback")
+    # Define relationships
+    curso = relationship('Curso', back_populates='feedback')
+    estudiante = relationship('Estudiante', back_populates='feedback')
 
     def to_dict(self) -> dict:
         return {
