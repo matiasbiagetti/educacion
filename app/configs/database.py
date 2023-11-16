@@ -24,7 +24,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
 
 def get_db_connection():
     db = scoped_session(SessionLocal)
-    print(DB_PASSWORD)
     print("DB connection opened")
     try:
         yield db

@@ -25,4 +25,9 @@ class CursosRepository:
     def get_by_estudiante_id(self, estudiante_id: int) -> list:
         return self.session.query(Curso).filter(Curso.estudiantes.any(id=estudiante_id)).all()
 
+    def add_student_to_course(self, id_curso: int, id_estudiante: int) -> Curso:
+        curso = self.session.query(Curso).filter(Curso.codigo == id_curso).first()
+
+        self.session.commit()
+        return curso
 

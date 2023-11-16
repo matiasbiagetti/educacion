@@ -28,6 +28,7 @@ def crear_colegio(payload: ColegioPayload, service: ColegiosService = Depends(Co
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
+
 @colegios_router.get("/{nombre_colegio}", response_model=ColegioResponse)
 def obtener_colegio(nombre_colegio: str, service: ColegiosService = Depends(ColegiosService)):
     """
@@ -38,6 +39,7 @@ def obtener_colegio(nombre_colegio: str, service: ColegiosService = Depends(Cole
         return ColegioResponse(**colegio)
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
+
 
 @colegios_router.get("/", response_model=list[ColegioResponse])
 def obtener_colegios(service: ColegiosService = Depends(ColegiosService)):
@@ -50,6 +52,7 @@ def obtener_colegios(service: ColegiosService = Depends(ColegiosService)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
+
 # endpoint that recieves by query param part of the name of the school and returns a list of schools that match the query, it will have many requests because is a searchbar in the frontend
 @colegios_router.get("/search/{nombre_colegio}", response_model=list[ColegioResponse])
 def obtener_colegios_por_nombre(nombre_colegio: str, service: ColegiosService = Depends(ColegiosService)):
@@ -61,5 +64,3 @@ def obtener_colegios_por_nombre(nombre_colegio: str, service: ColegiosService = 
         return [ColegioResponse(**colegio) for colegio in colegios]
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
-
-
