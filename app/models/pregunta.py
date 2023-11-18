@@ -19,12 +19,8 @@ class Pregunta(EntityMeta):
     cursos = relationship('Curso', secondary='preguntas_cursos', back_populates='preguntas')
     respuestas = relationship('Respuesta', back_populates='pregunta')
 
-
     def to_dict(self) -> dict:
         return {
             "id": self.id,
             "texto": self.texto,
-            "opciones": [opcion.to_dict() for opcion in self.opciones],
-            "cursos": [curso.to_dict() for curso in self.cursos],
-            "respuestas": [respuesta.to_dict() for respuesta in self.respuestas],
         }

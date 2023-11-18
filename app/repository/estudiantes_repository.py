@@ -1,3 +1,7 @@
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from app.configs.database import get_db_connection
 from app.models.estudiante import Estudiante
 
 

@@ -6,6 +6,7 @@ from app.models.profesor import Profesor
 from app.models.estudiante import Estudiante
 from app.models.feedback import Feedback
 from app.models.pregunta import Pregunta
+from app.models.colegio import Colegio
 
 
 class Curso(EntityMeta):
@@ -24,7 +25,6 @@ class Curso(EntityMeta):
     feedback = relationship('Feedback', back_populates='curso')
     preguntas = relationship('Pregunta', secondary='preguntas_cursos', back_populates='cursos')
 
-
     def to_dict(self) -> dict:
         return {
             "codigo": self.codigo,
@@ -37,5 +37,3 @@ class Curso(EntityMeta):
             "feedback": [feedback.to_dict() for feedback in self.feedback],
             "preguntas": [pregunta.to_dict() for pregunta in self.preguntas],
         }
-
-

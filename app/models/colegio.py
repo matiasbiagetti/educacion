@@ -2,7 +2,6 @@ from sqlalchemy import String, Column, Integer
 from sqlalchemy.orm import relationship
 
 from app.models.base_model import EntityMeta
-from app.models.curso import Curso
 
 
 class Colegio(EntityMeta):

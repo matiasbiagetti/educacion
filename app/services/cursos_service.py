@@ -2,7 +2,10 @@ from fastapi import Depends
 from pydantic import BaseModel
 
 from app.models.curso import Curso
+from app.models.preguntas_cursos import PreguntaCurso
 from app.repository.cursos_repository import CursosRepository
+from app.repository.estudiantes_cursos_repository import EstudiantesCursosRepository
+from app.repository.preguntas_cursos_repository import PreguntasCursosRepository
 
 
 class CursoData(BaseModel):
@@ -12,11 +15,16 @@ class CursoData(BaseModel):
     colegio_id: int
     anio_cursado: int
     division: str
+    preguntas: list
 
 
 class CursosService:
-    def __init__(self, cursos_repository: CursosRepository = Depends(CursosRepository)) -> None:
+    def __init__(self, cursos_repository: CursosRepository = Depends(CursosRepository),
+                 estudiantes_cursos_repository: EstudiantesCursosRepository = Depends(EstudiantesCursosRepository),
+                 preguntas_cursos_respository: PreguntasCursosRepository = Depends(PreguntasCursosRepository)) -> None:
         self.cursos_repository = cursos_repository
+        self.estudiantes_cursos_repository = estudiantes_cursos_repository
+        self.preguntas_cursos_respository = preguntas_cursos_respository
 
     def crear_curso(self, curso_data: CursoData) -> Curso:
         curso = Curso(
@@ -27,8 +35,9 @@ class CursosService:
             anio_cursado=curso_data.anio_cursado,
             division=curso_data.division
         )
-
         self.cursos_repository.save(curso)
+        for pregunta in curso_data.preguntas:
+            self.preguntas_cursos_respository.save(PreguntaCurso(curso_id=curso.codigo, pregunta_id=pregunta))
         return curso
 
     def obtener_curso(self, codigo: str) -> Curso:
