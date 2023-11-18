@@ -23,6 +23,7 @@ class Curso(EntityMeta):
     colegio = relationship('Colegio', back_populates='cursos')
     estudiantes = relationship('Estudiante', secondary='estudiantes_cursos', back_populates='cursos')
     feedback = relationship('Feedback', back_populates='curso')
+    respuestas = relationship('Respuesta', back_populates='curso')
     preguntas = relationship('Pregunta', secondary='preguntas_cursos', back_populates='cursos')
 
     def to_dict(self) -> dict:

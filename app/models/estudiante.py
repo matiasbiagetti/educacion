@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.models.base_model import EntityMeta
 from app.models.estudiantes_cursos import EstudianteCurso
 from app.models.feedback import Feedback
-from app.models.respuesta import Respuesta
+
 
 
 class Estudiante(EntityMeta):

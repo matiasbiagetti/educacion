@@ -17,7 +17,7 @@ class CursoPayload(BaseModel):
     colegio_id: int
     anio_cursado: int
     division: str
-    preguntas: list
+    preguntas: List[int]
 
 
 class CursoResponse(CursoPayload):
@@ -28,13 +28,6 @@ class CursoResponse(CursoPayload):
     estudiantes: list = []
 
 
-class AgregarAlumnoPayload(BaseModel):
-    estudiante_id: int
-    respuestas: dict
-
-
-class AgregarAlumnoResponse(AgregarAlumnoPayload):
-    curso_id: int
 
 
 @cursos_router.post("", status_code=HTTPStatus.CREATED, response_model=CursoResponse)
@@ -60,13 +53,13 @@ def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosSe
         raise HTTPException(status_code=500, detail=e)
 
 
-@cursos_router.get("/{id_curso}", response_model=List[CursoResponse])
-def obtener_curso(id_curso: int, service: CursosService = Depends(CursosService)):
+@cursos_router.get("/{curso_codigo}", response_model=List[CursoResponse])
+def obtener_curso(curso_codigo: int, service: CursosService = Depends(CursosService)):
     """
     Obtiene un curso
     """
     try:
-        curso = service.obtener_curso(id_curso)
+        curso = service.obtener_curso(curso_codigo)
         profesor_dict = {
             "id": curso.profesor.id,
             "nombre": curso.profesor.nombre,

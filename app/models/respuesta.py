@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 from app.models.base_model import EntityMeta
 from app.models.opcion import Opcion
 from app.models.pregunta import Pregunta
+from app.models.curso import Curso
+
 
 
 class Respuesta(EntityMeta):
@@ -16,10 +18,12 @@ class Respuesta(EntityMeta):
     opcion_id = Column(Integer, ForeignKey('opciones.id'), nullable=False)
     pregunta_id = Column(Integer, ForeignKey('preguntas.id'), nullable=False)
     alumno_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
+    curso_codigo = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
 
     # Define relationships
-    opcion = relationship('Opcion', back_populates='respuestas')
-    pregunta = relationship('Pregunta', back_populates='respuestas')
+    opcion = relationship(Opcion, back_populates='respuestas')
+    pregunta = relationship(Pregunta, back_populates='respuestas')
+    curso = relationship(Curso, back_populates='respuestas')
     estudiante = relationship('Estudiante', back_populates='respuestas')
 
     def to_dict(self) -> dict:
@@ -28,6 +32,7 @@ class Respuesta(EntityMeta):
             "opcion": self.opcion.to_dict(),
             "pregunta": self.pregunta.to_dict(),
             "estudiante": self.alumno.to_dict(),
+            "curso": self.curso.to_dict(),
         }
 
 
