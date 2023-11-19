@@ -8,6 +8,7 @@ from app.configs.sqlalchemy import mapper_registry_configure
 from app.routers.colegios_router import colegios_router
 from app.routers.cursos_router import cursos_router
 from app.routers.estudiantes_router import estudiantes_router
+from app.routers.feedback_router import feedback_router
 
 
 def create_app() -> FastAPI:
@@ -45,5 +46,6 @@ def create_app() -> FastAPI:
     app.include_router(colegios_router)
     app.include_router(cursos_router)
     app.include_router(estudiantes_router)
+    app.include_router(feedback_router)
 
     return app

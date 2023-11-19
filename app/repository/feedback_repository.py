@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -19,6 +21,12 @@ class FeedbackRepository:
         """
         self.session.add(feedback)
         self.session.commit()
+
+    def get_by_curso(self, curso_id: int) -> List[Feedback]:
+        """
+        Devuelve todos los feedback de un curso
+        """
+        return self.session.query(Feedback).filter(Feedback.curso_id == curso_id).all()
 
     def get_all(self) -> list:
         """

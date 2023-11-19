@@ -28,8 +28,6 @@ class CursoResponse(CursoPayload):
     estudiantes: list = []
 
 
-
-
 @cursos_router.post("", status_code=HTTPStatus.CREATED, response_model=CursoResponse)
 def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosService)):
     """
@@ -96,9 +94,9 @@ def obtener_cursos_por_profesor(profesor_id: int, service: CursosService = Depen
                 "nombre": curso.colegio.nombre,
             }
             response.append(CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
-                                            colegio=colegio_dict, anio_cursado=curso.anio_cursado,
-                                            division=curso.division,
-                                            preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
+                                          colegio=colegio_dict, anio_cursado=curso.anio_cursado,
+                                          division=curso.division,
+                                          preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
@@ -124,9 +122,9 @@ def obtener_cursos_por_estudiante(estudiante_id: int, service: CursosService = D
                 "nombre": curso.colegio.nombre,
             }
             response.append(CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
-                                            colegio=colegio_dict, anio_cursado=curso.anio_cursado,
-                                            division=curso.division,
-                                            preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
+                                          colegio=colegio_dict, anio_cursado=curso.anio_cursado,
+                                          division=curso.division,
+                                          preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
