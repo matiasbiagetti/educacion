@@ -9,7 +9,7 @@ from app.models.curso import Curso
 class Clase(EntityMeta):
     __tablename__ = 'clases'
     id = Column(Integer, primary_key=True)
-    curso_id = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
+    curso_codigo = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
     tema = Column(String(length=100), nullable=False)
 
     # Define the relationship with the 'cursos' table

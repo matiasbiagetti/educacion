@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -19,3 +21,9 @@ class ColegiosRepository:
         """
         self.session.add(colegio)
         self.session.commit()
+
+    def get_by_curso(self, curso_codigo: int) -> Colegio:
+        """
+        Devuelve todos los colegios de un curso
+        """
+        return self.session.query(Colegio).filter(Colegio.curso_codigo == curso_codigo).all()

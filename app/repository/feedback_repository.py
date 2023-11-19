@@ -22,11 +22,11 @@ class FeedbackRepository:
         self.session.add(feedback)
         self.session.commit()
 
-    def get_by_curso(self, curso_id: int) -> List[Feedback]:
+    def get_by_curso(self, curso_codigo: int) -> List[Feedback]:
         """
         Devuelve todos los feedback de un curso
         """
-        return self.session.query(Feedback).filter(Feedback.curso_id == curso_id).all()
+        return self.session.query(Feedback).filter(Feedback.curso_codigo == curso_codigo).all()
 
     def get_all(self) -> list:
         """
@@ -40,8 +40,8 @@ class FeedbackRepository:
         """
         return self.session.query(Feedback).filter(Feedback.id == id).first()
 
-    def get_by_curso_id(self, curso_id: int) -> list:
+    def get_by_curso_id(self, curso_codigo: int) -> list:
         """
         Devuelve todos los feedback de un curso
         """
-        return self.session.query(Feedback).filter(Feedback.curso_id == curso_id).all()
+        return self.session.query(Feedback).filter(Feedback.curso_codigo == curso_codigo).all()

@@ -23,8 +23,8 @@ class FeedbackService:
 
     def crear_feedback(self, data: FeedbackData) -> Feedback:
         feedback = Feedback(
-            alumno_id=data.estudiante_id,
-            curso_id=data.curso_codigo,
+            estudiante_id=data.estudiante_id,
+            curso_codigo=data.curso_codigo,
             clasificacion=data.clasificacion,
             texto=data.texto
         )

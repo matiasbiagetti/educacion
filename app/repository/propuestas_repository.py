@@ -32,8 +32,8 @@ class PropuestasRepository:
         """
         return self.session.query(Propuesta).filter(Propuesta.id == id).first()
 
-    def get_by_curso_id(self, curso_id: int) -> list:
+    def get_by_curso_id(self, curso_codigo: int) -> list:
         """
         Devuelve todas las propuestas de un curso
         """
-        return self.session.query(Propuesta).filter(Propuesta.curso_id == curso_id).all()
+        return self.session.query(Propuesta).filter(Propuesta.curso_id == curso_codigo).all()

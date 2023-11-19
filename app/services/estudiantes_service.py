@@ -4,7 +4,9 @@ from fastapi import Depends
 from pydantic import BaseModel
 
 from app.models.estudiante import Estudiante
+from app.models.estudiantes_cursos import EstudianteCurso
 from app.models.respuesta import Respuesta
+from app.repository.estudiantes_cursos_repository import EstudiantesCursosRepository
 from app.repository.estudiantes_repository import EstudiantesRepository
 from app.repository.respuestas_repository import RespuestasRepository
 
@@ -22,14 +24,21 @@ class AgregarEstudianteACursoData(BaseModel):
 
 class EstudiantesService:
     def __init__(self, estudiantes_repository: EstudiantesRepository = Depends(EstudiantesRepository),
-                 respuestas_repository: RespuestasRepository = Depends(RespuestasRepository)) -> None:
+                 respuestas_repository: RespuestasRepository = Depends(RespuestasRepository),
+                 estudiantes_cursos_repository: EstudiantesCursosRepository = Depends(EstudiantesCursosRepository)) -> None:
         self.respuestas_repository = respuestas_repository
         self.estudiantes_repository = estudiantes_repository
+        self.estudiantes_cursos_repository = estudiantes_cursos_repository
 
     def agregar_estudiante_a_curso(self, data: AgregarEstudianteACursoData) -> Estudiante:
+        self.estudiantes_cursos_repository.save(EstudianteCurso(
+            estudiante_id=data.estudiante_id,
+            curso_codigo=data.curso_codigo
+        ))
+
         for respuesta in data.respuestas:
             respuesta_a_guardar = Respuesta(
-                alumno_id=data.estudiante_id,
+                estudiante_id=data.estudiante_id,
                 pregunta_id=respuesta.pregunta_id,
                 opcion_id=respuesta.opcion_id,
                 curso_codigo=data.curso_codigo

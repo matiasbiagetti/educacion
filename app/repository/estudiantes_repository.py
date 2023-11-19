@@ -32,8 +32,8 @@ class EstudiantesRepository:
         """
         return self.session.query(Estudiante).filter(Estudiante.id == id).first()
 
-    def get_by_curso_id(self, curso_id: int) -> list:
+    def get_by_curso_id(self, curso_codigo: int) -> list:
         """
         Devuelve todos los estudiantes de un curso
         """
-        return self.session.query(Estudiante).filter(Estudiante.cursos.any(id=curso_id)).all()
+        return self.session.query(Estudiante).filter(Estudiante.cursos.any(id=curso_codigo)).all()

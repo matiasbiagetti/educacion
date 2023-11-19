@@ -37,7 +37,7 @@ class CursosService:
         )
         self.cursos_repository.save(curso)
         for pregunta in curso_data.preguntas:
-            self.preguntas_cursos_respository.save(PreguntaCurso(curso_id=curso.codigo, pregunta_id=pregunta))
+            self.preguntas_cursos_respository.save(PreguntaCurso(curso_codigo=curso.codigo, pregunta_id=pregunta))
         return curso
 
     def obtener_curso(self, codigo: str) -> Curso:

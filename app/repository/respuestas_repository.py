@@ -2,6 +2,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.configs.database import get_db_connection
+from app.models.estudiante import Estudiante
 from app.models.respuesta import Respuesta
 
 
@@ -44,10 +45,11 @@ class RespuestasRepository:
         """
         return self.session.query(Respuesta).filter(Respuesta.pregunta_id == pregunta_id).all()
 
-    def get_by_pregunta_id_and_curso_id(self, pregunta_id: int, curso_id: int) -> list:
+    def get_by_pregunta_id_and_curso_codigo(self, pregunta_id: int, curso_codigo: int) -> list:
         """
         Devuelve todas las respuestas de una pregunta y un curso
         """
-        return self.session.query(Respuesta).filter(Respuesta.pregunta_id == pregunta_id, Respuesta.estudiante_id == Estudiante.id, Estudiante.cursos.any(id=curso_id)).all()
+        return self.session.query(Respuesta).filter(Respuesta.pregunta_id == pregunta_id,
+                                                    Respuesta.estudiante_id == Estudiante.id, Estudiante.cursos.any(id=curso_codigo)).all()
 
 

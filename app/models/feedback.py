@@ -11,8 +11,8 @@ class Feedback(EntityMeta):
     __tablename__ = 'feedback'
     id = Column(Integer, primary_key=True)
     texto = Column(String(length=255), nullable=False)
-    curso_id = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
-    alumno_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
+    curso_codigo = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
+    estudiante_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
     clasificacion = Column(String(length=255), nullable=False)
 
     # Define relationships

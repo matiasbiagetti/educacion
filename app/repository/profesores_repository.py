@@ -32,8 +32,8 @@ class ProfesoresRepository:
         """
         return self.session.query(Profesor).filter(Profesor.id == id).first()
 
-    def get_by_curso_id(self, curso_id: int) -> list:
+    def get_by_curso_id(self, curso_codigo: int) -> list:
         """
         Devuelve todos los profesores de un curso
         """
-        return self.session.query(Profesor).filter(Profesor.cursos.any(id=curso_id)).all()
+        return self.session.query(Profesor).filter(Profesor.cursos.any(id=curso_codigo)).all()

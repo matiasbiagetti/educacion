@@ -17,7 +17,7 @@ class Respuesta(EntityMeta):
     id = Column(Integer, primary_key=True)
     opcion_id = Column(Integer, ForeignKey('opciones.id'), nullable=False)
     pregunta_id = Column(Integer, ForeignKey('preguntas.id'), nullable=False)
-    alumno_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
+    estudiante_id = Column(Integer, ForeignKey('estudiantes.id'), nullable=False)
     curso_codigo = Column(Integer, ForeignKey('cursos.codigo'), nullable=False)
 
     # Define relationships

@@ -32,11 +32,11 @@ class ClasesRepository:
         """
         return self.session.query(Clase).filter(Clase.codigo == codigo).first()
 
-    def get_by_curso_id(self, curso_id: int) -> list:
+    def get_by_curso_id(self, curso_codigo: int) -> list:
         """
         Devuelve todas las clases de un curso
         """
-        return self.session.query(Clase).filter(Clase.curso_id == curso_id).all()
+        return self.session.query(Clase).filter(Clase.curso_codigo == curso_codigo).all()
 
 
 

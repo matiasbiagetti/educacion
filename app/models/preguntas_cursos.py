@@ -6,7 +6,7 @@ from app.models.base_model import EntityMeta
 class PreguntaCurso(EntityMeta):
     __tablename__ = 'preguntas_cursos'
     pregunta_id = Column(Integer, ForeignKey('preguntas.id'), primary_key=True)
-    curso_id = Column(Integer, ForeignKey('cursos.codigo'), primary_key=True)
+    curso_codigo = Column(Integer, ForeignKey('cursos.codigo'), primary_key=True)
 
     # Define relationships
 

@@ -36,8 +36,8 @@ def crear_feedback(payload: FeedbackPayload, service: FeedbackService = Depends(
         )
         feedback = service.crear_feedback(data)
         return FeedbackResponse(id=feedback.id,
-                                estudiante_id=feedback.alumno_id,
-                                curso_codigo=feedback.curso_id,
+                                estudiante_id=feedback.estudiante_id,
+                                curso_codigo=feedback.curso_codigo,
                                 estudiante={
                                     "id": feedback.estudiante.id,
                                     "nombre": feedback.estudiante.nombre,
@@ -63,8 +63,8 @@ def obtener_feedback(curso_codigo: int, service: FeedbackService = Depends(Feedb
     try:
         feedback = service.get_by_curso(curso_codigo)
 
-        return [FeedbackResponse(estudiante_id=feedback.alumno_id,
-                                 curso_codigo=feedback.curso_id,
+        return [FeedbackResponse(estudiante_id=feedback.estudiante_id,
+                                 curso_codigo=feedback.curso_codigo,
                                  id=feedback.id,
                                  curso={
                                      "codigo": feedback.curso.codigo,
