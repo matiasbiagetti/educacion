@@ -26,6 +26,7 @@ class CursoResponse(CursoPayload):
     profesor_id: int = None
     colegio_id: int = None
     estudiantes: list = []
+    preguntas: List[dict] = []
 
 
 @cursos_router.post("", status_code=HTTPStatus.CREATED, response_model=CursoResponse)
@@ -44,9 +45,24 @@ def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosSe
             preguntas=payload.preguntas
         )
         curso = service.crear_curso(data)
-        return CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=curso.profesor.to_dict(),
-                             colegio=curso.colegio.to_dict(), anio_cursado=curso.anio_cursado, division=curso.division
-                             , preguntas=[pregunta.to_dict() for pregunta in curso.preguntas])
+        return CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor={
+            "id": curso.profesor.id,
+            "nombre": curso.profesor.nombre,
+            "apellido": curso.profesor.apellido,
+        },
+                             colegio={
+                                    "id": curso.colegio.id,
+                                    "nombre": curso.colegio.nombre,
+                             }, anio_cursado=curso.anio_cursado, division=curso.division
+                             , preguntas=[{
+            "id": pregunta.id,
+            "texto": pregunta.texto,
+            "opciones": [{
+                "id": opcion.id,
+                "texto": opcion.texto,
+            } for opcion in pregunta.opciones]
+        } for pregunta in curso.preguntas])
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
@@ -69,7 +85,14 @@ def obtener_curso(curso_codigo: int, service: CursosService = Depends(CursosServ
         }
         return [CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
                               colegio=colegio_dict, anio_cursado=curso.anio_cursado, division=curso.division,
-                              preguntas=[pregunta.to_dict() for pregunta in curso.preguntas])]
+                              preguntas=[{
+                                    "id": pregunta.id,
+                                    "texto": pregunta.texto,
+                                    "opciones": [{
+                                        "id": opcion.id,
+                                        "texto": opcion.texto,
+                                    } for opcion in pregunta.opciones]
+                              } for pregunta in curso.preguntas])]
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
@@ -96,7 +119,14 @@ def obtener_cursos_por_profesor(profesor_id: int, service: CursosService = Depen
             response.append(CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
                                           colegio=colegio_dict, anio_cursado=curso.anio_cursado,
                                           division=curso.division,
-                                          preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
+                                          preguntas=[{
+                                                "id": pregunta.id,
+                                                "texto": pregunta.texto,
+                                                "opciones": [{
+                                                    "id": opcion.id,
+                                                    "texto": opcion.texto,
+                                                } for opcion in pregunta.opciones]
+                                          } for pregunta in curso.preguntas]))
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
@@ -124,7 +154,14 @@ def obtener_cursos_por_estudiante(estudiante_id: int, service: CursosService = D
             response.append(CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
                                           colegio=colegio_dict, anio_cursado=curso.anio_cursado,
                                           division=curso.division,
-                                          preguntas=[pregunta.to_dict() for pregunta in curso.preguntas]))
+                                          preguntas=[{
+                                                "id": pregunta.id,
+                                                "texto": pregunta.texto,
+                                                "opciones": [{
+                                                    "id": opcion.id,
+                                                    "texto": opcion.texto,
+                                                } for opcion in pregunta.opciones]
+                                          } for pregunta in curso.preguntas]))
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)

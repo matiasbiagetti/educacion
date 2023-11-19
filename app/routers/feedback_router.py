@@ -11,7 +11,6 @@ feedback_router = APIRouter(prefix="/feedback", tags=["Feedback"])
 
 class FeedbackPayload(BaseModel):
     estudiante_id: int
-    curso_codigo: int
     clasificacion: str
     texto: str
 
@@ -23,14 +22,14 @@ class FeedbackResponse(FeedbackPayload):
 
 
 @feedback_router.post("/cursos/{curso_codigo}", status_code=HTTPStatus.CREATED, response_model=FeedbackResponse)
-def crear_feedback(payload: FeedbackPayload, service: FeedbackService = Depends(FeedbackService)):
+def crear_feedback(curso_codigo: int, payload: FeedbackPayload, service: FeedbackService = Depends(FeedbackService)):
     """
     Crea un feedback
     """
     try:
         data = FeedbackData(
             estudiante_id=payload.estudiante_id,
-            curso_codigo=payload.curso_codigo,
+            curso_codigo=curso_codigo,
             clasificacion=payload.clasificacion,
             texto=payload.texto
         )

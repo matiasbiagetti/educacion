@@ -10,14 +10,20 @@ from app.services.estudiantes_service import AgregarEstudianteACursoData, Estudi
 estudiantes_router = APIRouter(prefix="/estudiantes", tags=["Estudiantes"])
 
 
+class RespuestaItem(BaseModel):
+    pregunta_id: int
+    opcion_id: int
+
+
 class AgregarEstudianteACursoPayload(BaseModel):
-    respuestas: List[Dict[str,int]]
+    respuestas: List[Dict[str, int]]
 
 
 class AgregarEstudianteACursoResponse(AgregarEstudianteACursoPayload):
     cursos: List[dict]
     estudiante_id: int
     estudiante_nombre: str
+    respuestas: List[dict]
 
 
 @estudiantes_router.post("/{estudiante_id}/cursos/{curso_codigo}", status_code=HTTPStatus.CREATED,
@@ -36,7 +42,33 @@ def agregar_estudiante_a_curso(estudiante_id: int,
             curso_codigo=curso_codigo
         )
         estudiante_respuesta = service.agregar_estudiante_a_curso(data)
-        cursos = [curso.to_dict() for curso in estudiante_respuesta.cursos if curso.codigo == curso_codigo]
+        cursos = [{
+            "codigo": curso.codigo,
+            "materia": curso.materia,
+            "anio_cursado": curso.anio_cursado,
+            "division": curso.division,
+            "profesor": {
+                "id": curso.profesor.id,
+                "nombre": curso.profesor.nombre,
+                "apellido": curso.profesor.apellido,
+            },
+            "colegio": {
+                "id": curso.colegio.id,
+                "nombre": curso.colegio.nombre,
+            },
+            "preguntas": [{
+                "id": pregunta.id,
+                "texto": pregunta.texto,
+                "opciones": [{
+                    "id": opcion.id,
+                    "texto": opcion.texto,
+                } for opcion in pregunta.opciones]
+            } for pregunta in curso.preguntas],
+            "estudiantes": [{
+                "id": estudiante.id,
+                "nombre": estudiante.nombre,
+            } for estudiante in curso.estudiantes],
+        } for curso in estudiante_respuesta.cursos if curso.codigo == curso_codigo]
         respuestas_response = [{
             "id": respuesta.id,
             "opcion": {
