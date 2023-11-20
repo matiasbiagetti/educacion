@@ -46,3 +46,12 @@ class EstudiantesService:
             self.respuestas_repository.save(respuesta_a_guardar)
         estudiante = self.estudiantes_repository.get_by_id(data.estudiante_id)
         return estudiante
+
+    def obtener_estudiantes_por_curso(self, curso_codigo: int) -> List[Estudiante]:
+        estudiantes_cursos = self.estudiantes_cursos_repository.get_by_curso_codigo(curso_codigo)
+        estudiantes = []
+        for estudiante_curso in estudiantes_cursos:
+            estudiante = self.estudiantes_repository.get_by_id(estudiante_curso.estudiante_id)
+            estudiantes.append(estudiante)
+        return estudiantes
+

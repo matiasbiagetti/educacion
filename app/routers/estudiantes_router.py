@@ -23,6 +23,7 @@ class AgregarEstudianteACursoResponse(AgregarEstudianteACursoPayload):
     cursos: List[dict]
     estudiante_id: int
     estudiante_nombre: str
+    estudiante_apellido: str
     respuestas: List[dict]
 
 
@@ -67,7 +68,7 @@ def agregar_estudiante_a_curso(estudiante_id: int,
             "estudiantes": [{
                 "id": estudiante.id,
                 "nombre": estudiante.nombre,
-            } for estudiante in curso.estudiantes],
+            } for estudiante in service.obtener_estudiantes_por_curso(curso.codigo)],
         } for curso in estudiante_respuesta.cursos if curso.codigo == curso_codigo]
         respuestas_response = [{
             "id": respuesta.id,
@@ -95,6 +96,7 @@ def agregar_estudiante_a_curso(estudiante_id: int,
             cursos=cursos,
             estudiante_id=estudiante_respuesta.id,
             estudiante_nombre=estudiante_respuesta.nombre,
+            estudiante_apellido=estudiante_respuesta.apellido,
             respuestas=respuestas_response
         )
     except Exception as e:

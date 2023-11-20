@@ -3,6 +3,7 @@ from typing import Any
 from fastapi import FastAPI, APIRouter
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
+from starlette.middleware.cors import CORSMiddleware
 
 from app.configs.sqlalchemy import mapper_registry_configure
 from app.routers.colegios_router import colegios_router
@@ -42,7 +43,15 @@ def create_app() -> FastAPI:
         return app.openapi_schema
 
     app.openapi = custom_openapi
+    origins = ["*"]
 
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.include_router(colegios_router)
     app.include_router(cursos_router)
     app.include_router(estudiantes_router)

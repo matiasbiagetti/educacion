@@ -40,7 +40,7 @@ class CursosService:
             self.preguntas_cursos_respository.save(PreguntaCurso(curso_codigo=curso.codigo, pregunta_id=pregunta))
         return curso
 
-    def obtener_curso(self, codigo: str) -> Curso:
+    def obtener_curso(self, codigo: int) -> Curso:
         return self.cursos_repository.get_by_codigo(codigo)
 
     def obtener_cursos(self) -> list[Curso]:
@@ -54,3 +54,4 @@ class CursosService:
 
     def agregar_alumno_a_curso(self, id_curso: int, id_estudiante: int) -> Curso:
         return self.cursos_repository.add_student_to_course(id_curso, id_estudiante)
+

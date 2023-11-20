@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -19,3 +21,9 @@ class EstudiantesCursosRepository:
         """
         self.session.add(estudiante_curso)
         self.session.commit()
+
+    def get_by_curso_codigo(self, curso_codigo: int) -> List[EstudianteCurso]:
+        """
+        Obtiene todos los estudiantes
+        """
+        return self.session.query(EstudianteCurso).filter(EstudianteCurso.curso_codigo == curso_codigo).all()

@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from app.services.cursos_service import CursosService, CursoData
 from app.models.curso import Curso
+from app.services.estudiantes_service import EstudiantesService
 
 cursos_router = APIRouter(prefix="/cursos", tags=["Cursos"])
 
@@ -25,12 +26,13 @@ class CursoResponse(CursoPayload):
     colegio: dict = None
     profesor_id: int = None
     colegio_id: int = None
-    estudiantes: list = []
+    estudiantes: list
     preguntas: List[dict] = []
 
 
 @cursos_router.post("", status_code=HTTPStatus.CREATED, response_model=CursoResponse)
-def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosService)):
+def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosService),
+                estudiante_service: EstudiantesService = Depends(EstudiantesService)):
     """
     Crea un curso
     """
@@ -51,24 +53,31 @@ def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosSe
             "apellido": curso.profesor.apellido,
         },
                              colegio={
-                                    "id": curso.colegio.id,
-                                    "nombre": curso.colegio.nombre,
+                                 "id": curso.colegio.id,
+                                 "nombre": curso.colegio.nombre,
                              }, anio_cursado=curso.anio_cursado, division=curso.division
                              , preguntas=[{
-            "id": pregunta.id,
-            "texto": pregunta.texto,
-            "opciones": [{
-                "id": opcion.id,
-                "texto": opcion.texto,
-            } for opcion in pregunta.opciones]
-        } for pregunta in curso.preguntas])
+                "id": pregunta.id,
+                "texto": pregunta.texto,
+                "opciones": [{
+                    "id": opcion.id,
+                    "texto": opcion.texto,
+                } for opcion in pregunta.opciones]
+            } for pregunta in curso.preguntas],
+                             estudiantes=[{
+                                 "id": estudiante.id,
+                                 "nombre": estudiante.nombre,
+                                 "apellido": estudiante.apellido,
+                             } for estudiante in estudiante_service.obtener_estudiantes_por_curso(curso.codigo)])
+
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
 
 @cursos_router.get("/{curso_codigo}", response_model=List[CursoResponse])
-def obtener_curso(curso_codigo: int, service: CursosService = Depends(CursosService)):
+def obtener_curso(curso_codigo: int, service: CursosService = Depends(CursosService),
+                  estudiantes_service: EstudiantesService = Depends(EstudiantesService)):
     """
     Obtiene un curso
     """
@@ -86,19 +95,26 @@ def obtener_curso(curso_codigo: int, service: CursosService = Depends(CursosServ
         return [CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor=profesor_dict,
                               colegio=colegio_dict, anio_cursado=curso.anio_cursado, division=curso.division,
                               preguntas=[{
-                                    "id": pregunta.id,
-                                    "texto": pregunta.texto,
-                                    "opciones": [{
-                                        "id": opcion.id,
-                                        "texto": opcion.texto,
-                                    } for opcion in pregunta.opciones]
-                              } for pregunta in curso.preguntas])]
+                                  "id": pregunta.id,
+                                  "texto": pregunta.texto,
+                                  "opciones": [{
+                                      "id": opcion.id,
+                                      "texto": opcion.texto,
+                                  } for opcion in pregunta.opciones]
+                              } for pregunta in curso.preguntas],
+                              estudiantes=[{
+                                  "id": estudiante.id,
+                                  "nombre": estudiante.nombre,
+                                  "apellido": estudiante.apellido,
+                              } for estudiante in estudiantes_service.obtener_estudiantes_por_curso(curso.codigo)])]
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
 
 @cursos_router.get("/profesores/{profesor_id}", response_model=list[CursoResponse])
-def obtener_cursos_por_profesor(profesor_id: int, service: CursosService = Depends(CursosService)):
+def obtener_cursos_por_profesor(profesor_id: int, service: CursosService = Depends(CursosService),
+                                estudiantes_service: EstudiantesService = Depends(EstudiantesService)):
     """
     Obtiene todos los cursos de un profesor
     """
@@ -120,20 +136,28 @@ def obtener_cursos_por_profesor(profesor_id: int, service: CursosService = Depen
                                           colegio=colegio_dict, anio_cursado=curso.anio_cursado,
                                           division=curso.division,
                                           preguntas=[{
-                                                "id": pregunta.id,
-                                                "texto": pregunta.texto,
-                                                "opciones": [{
-                                                    "id": opcion.id,
-                                                    "texto": opcion.texto,
-                                                } for opcion in pregunta.opciones]
-                                          } for pregunta in curso.preguntas]))
+                                              "id": pregunta.id,
+                                              "texto": pregunta.texto,
+                                              "opciones": [{
+                                                  "id": opcion.id,
+                                                  "texto": opcion.texto,
+                                              } for opcion in pregunta.opciones]
+                                          } for pregunta in curso.preguntas],
+                                          estudiantes=[{
+                                              "id": estudiante.id,
+                                              "nombre": estudiante.nombre,
+                                              "apellido": estudiante.apellido,
+                                          } for estudiante in estudiantes_service.obtener_estudiantes_por_curso(
+                                              curso.codigo)]))
+
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
 
 @cursos_router.get("/estudiantes/{estudiante_id}", response_model=list[CursoResponse])
-def obtener_cursos_por_estudiante(estudiante_id: int, service: CursosService = Depends(CursosService)):
+def obtener_cursos_por_estudiante(estudiante_id: int, service: CursosService = Depends(CursosService),
+                                  estudiantes_service: EstudiantesService = Depends(EstudiantesService)):
     """
     Obtiene todos los cursos de un estudiante
     """
@@ -155,13 +179,19 @@ def obtener_cursos_por_estudiante(estudiante_id: int, service: CursosService = D
                                           colegio=colegio_dict, anio_cursado=curso.anio_cursado,
                                           division=curso.division,
                                           preguntas=[{
-                                                "id": pregunta.id,
-                                                "texto": pregunta.texto,
-                                                "opciones": [{
-                                                    "id": opcion.id,
-                                                    "texto": opcion.texto,
-                                                } for opcion in pregunta.opciones]
-                                          } for pregunta in curso.preguntas]))
+                                              "id": pregunta.id,
+                                              "texto": pregunta.texto,
+                                              "opciones": [{
+                                                  "id": opcion.id,
+                                                  "texto": opcion.texto,
+                                              } for opcion in pregunta.opciones]
+                                          } for pregunta in curso.preguntas],
+                                          estudiantes=[{
+                                              "id": estudiante.id,
+                                              "nombre": estudiante.nombre,
+                                              "apellido": estudiante.apellido,
+                                          } for estudiante in estudiantes_service.obtener_estudiantes_por_curso(
+                                              curso.codigo)]))
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)

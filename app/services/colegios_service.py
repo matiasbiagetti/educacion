@@ -29,4 +29,4 @@ class ColegiosService:
         """
         Devuelve el colegio de un curso
         """
-        return self.colegios_repository.get_by_curso_id(curso_codigo)
+        return self.colegios_repository.get_by_curso(curso_codigo)
