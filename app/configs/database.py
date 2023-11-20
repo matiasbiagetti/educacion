@@ -7,12 +7,12 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv()
 
 # Get environment variables
-DB_DIALECT = os.getenv("DB_DIALECT", "jdbc:postgresql")
+DB_DIALECT = os.getenv("DB_DIALECT", "mysql+pymysql")
 DB_USER = os.getenv("DB_USER", "root")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_HOST = os.getenv("DB_HOST", "34.176.118.189")
 DB_PORT = os.getenv("DB_PORT", "3306")
-DB_NAME = os.getenv("DB_NAME", "educacion")
+DB_NAME = os.getenv("DB_NAME", "teach-track")
 
 DATABASE_URL = f"{DB_DIALECT}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
