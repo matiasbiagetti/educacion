@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import Depends
 from pydantic import BaseModel
 
@@ -9,7 +11,7 @@ from app.repository.preguntas_cursos_repository import PreguntasCursosRepository
 
 
 class CursoData(BaseModel):
-    codigo: int = None
+    codigo:  Optional[int] = None
     materia: str
     profesor_id: int
     colegio_id: int
