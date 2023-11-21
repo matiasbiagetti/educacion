@@ -9,7 +9,7 @@ from app.repository.preguntas_cursos_repository import PreguntasCursosRepository
 
 
 class CursoData(BaseModel):
-    codigo: int
+    codigo: int = None
     materia: str
     profesor_id: int
     colegio_id: int
