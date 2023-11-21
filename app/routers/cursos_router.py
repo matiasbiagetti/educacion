@@ -37,15 +37,25 @@ def crear_curso(payload: CursoPayload, service: CursosService = Depends(CursosSe
     Crea un curso
     """
     try:
-        data = CursoData(
-            codigo=payload.codigo,
-            materia=payload.materia,
-            profesor_id=payload.profesor_id,
-            colegio_id=payload.colegio_id,
-            anio_cursado=payload.anio_cursado,
-            division=payload.division,
-            preguntas=payload.preguntas
-        )
+        if payload.codigo is None:
+            data = CursoData(
+                materia=payload.materia,
+                profesor_id=payload.profesor_id,
+                colegio_id=payload.colegio_id,
+                anio_cursado=payload.anio_cursado,
+                division=payload.division,
+                preguntas=payload.preguntas
+            )
+        else:
+            data = CursoData(
+                codigo=payload.codigo,
+                materia=payload.materia,
+                profesor_id=payload.profesor_id,
+                colegio_id=payload.colegio_id,
+                anio_cursado=payload.anio_cursado,
+                division=payload.division,
+                preguntas=payload.preguntas
+            )
         curso = service.crear_curso(data)
         return CursoResponse(codigo=curso.codigo, materia=curso.materia, profesor={
             "id": curso.profesor.id,
