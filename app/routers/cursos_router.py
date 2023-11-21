@@ -12,7 +12,7 @@ cursos_router = APIRouter(prefix="/cursos", tags=["Cursos"])
 
 
 class CursoPayload(BaseModel):
-    codigo: int
+    codigo: int = None
     materia: str
     profesor_id: int
     colegio_id: int
