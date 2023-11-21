@@ -11,6 +11,7 @@ from app.routers.cursos_router import cursos_router
 from app.routers.estudiantes_router import estudiantes_router
 from app.routers.feedback_router import feedback_router
 from app.routers.ping_router import ping_router
+from app.routers.propuestas_router import propuestas_router
 
 
 def create_app() -> FastAPI:
@@ -58,5 +59,6 @@ def create_app() -> FastAPI:
     app.include_router(estudiantes_router)
     app.include_router(feedback_router)
     app.include_router(ping_router)
+    app.include_router(propuestas_router)
 
     return app

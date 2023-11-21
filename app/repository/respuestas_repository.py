@@ -1,4 +1,5 @@
 from fastapi import Depends
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.configs.database import get_db_connection
@@ -51,5 +52,19 @@ class RespuestasRepository:
         """
         return self.session.query(Respuesta).filter(Respuesta.pregunta_id == pregunta_id,
                                                     Respuesta.estudiante_id == Estudiante.id, Estudiante.cursos.any(id=curso_codigo)).all()
+
+    def get_respuestas_a_pregunta_por_curso(self, pregunta_id: int, curso_codigo: int) -> list:
+        """
+        Devuelve todas las respuestas de una pregunta y un curso
+        """
+        query = "SELECT opciones.texto AS texto_opcion " \
+                "FROM respuestas " \
+                "JOIN estudiantes ON respuestas.estudiante_id = estudiantes.id " \
+                "JOIN opciones ON respuestas.opcion_id = opciones.id " \
+                "JOIN preguntas ON respuestas.pregunta_id = preguntas.id " \
+                "JOIN cursos ON respuestas.curso_codigo = cursos.codigo " \
+                f"WHERE preguntas.id = {pregunta_id} AND cursos.codigo ={curso_codigo};"
+
+        return self.session.execute(text(query)).all()
 
 
