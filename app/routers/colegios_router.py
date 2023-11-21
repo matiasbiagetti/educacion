@@ -29,14 +29,14 @@ def crear_colegio(payload: ColegioPayload, service: ColegiosService = Depends(Co
         raise HTTPException(status_code=500, detail=e)
 
 
-@colegios_router.get("/{nombre_colegio}", response_model=ColegioResponse)
+@colegios_router.get("/{id_colegio}", response_model=ColegioResponse)
 def obtener_colegio(nombre_colegio: str, service: ColegiosService = Depends(ColegiosService)):
     """
     Obtiene un colegio
     """
     try:
         colegio = service.obtener_colegio(nombre_colegio)
-        return ColegioResponse(**colegio)
+        return ColegioResponse(id=colegio.id, nombre=colegio.nombre)
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
@@ -48,7 +48,7 @@ def obtener_colegios(service: ColegiosService = Depends(ColegiosService)):
     """
     try:
         colegios = service.obtener_colegios()
-        return [ColegioResponse(**colegio) for colegio in colegios]
+        return [ColegioResponse(nombre=colegio.nombre, id=colegio.id) for colegio in colegios]
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
 
@@ -60,7 +60,7 @@ def obtener_colegios_por_nombre(nombre_colegio: str, service: ColegiosService = 
     Obtiene todos los colegios que contengan el nombre
     """
     try:
-        colegios = service.obtener_colegios_por_nombre(nombre_colegio)
-        return [ColegioResponse(**colegio) for colegio in colegios]
+        colegios = service.obtener_colegio_que_comience_con(nombre_colegio)
+        return [ColegioResponse(id=colegio.id, nombre=colegio.nombre) for colegio in colegios]
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)

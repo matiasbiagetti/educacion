@@ -30,3 +30,21 @@ class ColegiosService:
         Devuelve el colegio de un curso
         """
         return self.colegios_repository.get_by_curso(curso_codigo)
+
+    def obtener_colegios(self):
+        """
+        Devuelve todos los colegios
+        """
+        return self.colegios_repository.get_all()
+
+    def obtener_colegio_que_comience_con(self, nombre_colegio: str):
+        """
+        Devuelve todos los colegios que contengan el nombre
+        """
+        return self.colegios_repository.get_that_starts_with(nombre_colegio)
+
+    def obtener_colegio(self, id_colegio: int):
+        """
+        Devuelve un colegio
+        """
+        return self.colegios_repository.get_by_id(id_colegio)

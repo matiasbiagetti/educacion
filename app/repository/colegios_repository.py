@@ -27,3 +27,21 @@ class ColegiosRepository:
         Devuelve todos los colegios de un curso
         """
         return self.session.query(Colegio).filter(Colegio.curso_codigo == curso_codigo).all()
+
+    def get_all(self) -> List[Colegio]:
+        """
+        Devuelve todos los colegios
+        """
+        return self.session.query(Colegio).all()
+
+    def get_that_starts_with(self, nombre_colegio: str) -> List[Colegio]:
+        """
+        Devuelve todos los colegios que contengan el nombre
+        """
+        return self.session.query(Colegio).filter(Colegio.nombre.ilike(f"{nombre_colegio}%")).all()
+
+    def get_by_id(self, id_colegio: int) -> Colegio:
+        """
+        Devuelve un colegio
+        """
+        return self.session.query(Colegio).filter(Colegio.id == id_colegio).first()
